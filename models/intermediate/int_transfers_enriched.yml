@@ -1,0 +1,87 @@
+version: 2
+
+models:
+  - name: int_transfers_enriched
+    description: "Transfer-grain enriched model combining transfers with dimensions, FX, coupons, and app usage flags."
+
+    columns:
+      - name: transfer_id
+        description: "Primary key of the transfer."
+        tests:
+          - not_null
+          - unique
+
+      - name: welcome_city_id
+        description: "Destination city identifier."
+        tests:
+          - not_null
+
+      - name: hailing_type
+        description: "Hailing type from welcome cities."
+
+      - name: driver_type
+        description: "Derived driver classification based on driver_company_id."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: ['individual', 'company']
+
+      - name: transfer_status
+        description: "Normalized transfer status."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: ['finished', 'canceled']
+
+      - name: is_booked
+        description: "Flag indicating the transfer is counted as booked."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: [0, 1]
+
+      - name: is_operated
+        description: "Flag indicating the transfer is counted as operated."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: [0, 1]
+
+      - name: is_cancelled
+        description: "Flag indicating the transfer is counted as cancelled."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: [0, 1]
+
+      - name: is_perfect_app_usage
+        description: "Flag indicating the transfer satisfies the required perfect app usage events."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: [0, 1]
+
+      - name: traveler_price_eur
+        description: "Traveler price converted to EUR."
+
+      - name: coupon_discount_eur
+        description: "Coupon discount converted to EUR."
+
+    tests:
+      - dbt_utils.expression_is_true:
+          arguments: 
+            expression: "is_booked = 1"
+
+      - dbt_utils.expression_is_true:
+          arguments: 
+            expression: "is_operated + is_cancelled <= 1"
+            
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          arguments:
+            compare_model: ref('stg_landing__transfers')  

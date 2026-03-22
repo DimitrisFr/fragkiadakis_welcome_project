@@ -1,0 +1,38 @@
+models:
+  - name: stg_landing__transfers
+    description: "Staging model for transfer transactions."
+
+    columns:
+      - name: transfer_id
+        description: "Primary key of the transfer."
+        tests:
+          - not_null
+          - unique
+
+      - name: welcome_city_id
+        description: "Destination city identifier of the transfer."
+        tests:
+          - not_null
+
+      - name: driver_id
+        description: "Driver assigned to operate the transfer."
+
+      - name: coupon_id
+        description: "Coupon applied to the transfer, if any."
+
+      - name: transfer_status
+        description: "Raw transfer status standardized to lowercase."
+        tests:
+          - not_null
+
+      - name: traveler_price
+        description: "Amount paid by the traveler in the original transaction currency."
+
+      - name: currency_code
+        description: "Transaction currency code standardized to uppercase."
+
+      - name: operated_at
+        description: "Timestamp when the transfer was operated; used for operational and financial reporting."
+
+      - name: created_at
+        description: "Timestamp when the transfer was booked; used for sales reporting."

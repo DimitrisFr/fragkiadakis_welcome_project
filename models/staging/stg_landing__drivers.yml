@@ -1,0 +1,14 @@
+
+
+models:
+  - name: stg_landing__drivers
+    description: "Staging model for drivers"
+    columns:
+      - name: driver_id
+        description: "Primary key of the driver"
+        tests:
+          - not_null
+          - unique
+
+      - name: driver_company_id
+        description: "Company the driver belongs to"

@@ -1,0 +1,103 @@
+version: 2
+
+models:
+  - name: int_transfer_event_flags
+    description: "Transfer-level event flag model derived from activity events. Contains one row per transfer and the derived perfect app usage flag."
+
+    columns:
+      - name: transfer_id
+        description: "Transfer identifier at the grain of the model."
+        tests:
+          - not_null
+          - unique
+
+      - name: has_driver_confirmed_operation
+        description: "Flag indicating whether the transfer has at least one driver_confirmed_operation event."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: [0, 1]
+
+      - name: has_driver_at_pickup_location
+        description: "Flag indicating whether the transfer has at least one driver_at_pickup_location event."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: [0, 1]
+
+      - name: has_driver_met_traveler
+        description: "Flag indicating whether the transfer has at least one driver_met_traveler event."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: [0, 1]
+
+      - name: has_transfer_finished
+        description: "Flag indicating whether the transfer has at least one transfer_finished event."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: [0, 1]
+
+      - name: has_driver_accepted
+        description: "Flag indicating whether the transfer has at least one driver_accepted event."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: [0, 1]
+
+      - name: has_driver_begin_ride
+        description: "Flag indicating whether the transfer has at least one driver_begin_ride event."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: [0, 1]
+
+      - name: has_driver_review_request
+        description: "Flag indicating whether the transfer has at least one driver_review_request event."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+               values: [0, 1]
+
+      - name: has_traveler_no_show_up
+        description: "Flag indicating whether the transfer has at least one traveler_no_show_up event."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: [0, 1]
+
+      - name: has_transfer_removed_from_schedule
+        description: "Flag indicating whether the transfer has at least one transfer_removed_from_schedule event."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: [0, 1]
+
+      - name: first_event_at
+        description: "Earliest event timestamp observed for the transfer."
+
+      - name: last_event_at
+        description: "Latest event timestamp observed for the transfer."
+
+      - name: total_activity_events
+        description: "Total number of activity event rows recorded for the transfer."
+        tests:
+          - not_null
+
+      - name: is_perfect_app_usage
+        description: "Flag indicating whether all required events for perfect app usage are present."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: [0, 1]

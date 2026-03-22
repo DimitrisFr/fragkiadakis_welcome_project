@@ -1,0 +1,28 @@
+
+models:
+  - name: stg_landing__coupons
+    description: "Staging model for coupons applied to transfers."
+
+    columns:
+      - name: coupon_id
+        description: "Primary key of the coupon."
+        tests:
+          - not_null
+          - unique
+
+      - name: cost_kind
+        description: "Type of coupon application (e.g. percentage, fixed)."
+        tests:
+          - not_null
+
+      - name: cost_amount
+        description: "Value of the coupon depending on cost_kind."
+
+      - name: currency_code
+        description: "Currency in which the coupon was issued."
+
+      - name: created_at
+        description: "Timestamp when the coupon was created."
+
+      - name: updated_at
+        description: "Timestamp when the coupon was last updated."

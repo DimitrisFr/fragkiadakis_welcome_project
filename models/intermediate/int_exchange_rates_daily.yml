@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: int_exchange_rates_daily
+    description: "Daily normalized FX table with one row per date and currency code. Rates are interpreted as currency units per 1 EUR."
+
+    columns:
+      - name: exchange_rate_date
+        description: "Date the exchange rate applies to."
+        tests:
+          - not_null
+
+      - name: currency_code
+        description: "Currency code from the exploded rates JSON."
+        tests:
+          - not_null
+
+      - name: base_currency_code
+        description: "Base reporting currency, expected to be EUR."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: ['EUR']
+
+      - name: exchange_rate_to_eur
+        description: "Number of currency units per 1 EUR for the given day and currency."
+        tests:
+          - not_null
+
+    tests:
+      - dbt_utils.unique_combination_of_columns: #ensure that we dont have multiple rates for a single currency by date.
+          arguments:
+            combination_of_columns:
+                - exchange_rate_date
+                - currency_code

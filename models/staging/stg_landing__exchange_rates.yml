@@ -1,0 +1,19 @@
+
+models:
+  - name: stg_landing__exchange_rates
+    description: "Staging model for daily exchange rates. Contains one row per date with a JSON field of currency rates relative to a base currency (EUR)."
+
+    columns:
+      - name: exchange_rate_date
+        description: "The date the exchange rates apply to."
+        tests:
+          - not_null
+          - unique
+
+      - name: rates_json
+        description: "JSON dictionary containing currency exchange rates relative to the base currency."
+
+      - name: base_currency_code
+        description: "Base currency for the exchange rates (EUR for Welcome Pickups)."
+        tests:
+          - not_null

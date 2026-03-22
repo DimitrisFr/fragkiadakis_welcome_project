@@ -1,0 +1,94 @@
+version: 2
+
+models:
+  - name: mart_transfers_kpi_daily
+    description: "Daily KPI mart for transfers anchored on operated_date."
+
+    columns:
+
+      - name: metric_date
+        description: "Daily reporting date, anchored on operated_date."
+        tests:
+          - not_null
+
+      - name: welcome_city_id
+        description: "Destination city identifier."
+        tests:
+          - not_null
+
+      - name: hailing_type
+        description: "Hailing type for the destination city."
+        tests:
+          - not_null
+
+      - name: driver_type
+        description: "Driver classification."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['individual', 'company']
+
+      - name: transfers_booked
+        description: "Count of booked transfers on the operated-date grain."
+        tests:
+          - not_null
+
+      - name: transfers_operated
+        description: "Count of operated transfers on the operated-date grain."
+        tests:
+          - not_null
+
+      - name: cancellation_rate
+        description: "Operational cancellation rate on the operated-date grain."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments: 
+                min_value: 0
+                max_value: 1
+
+
+      - name: gmv
+        description: "Gross merchandise value in EUR."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments: 
+                min_value: 0
+
+
+      - name: coupon_discount
+        description: "Coupon discount in EUR."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+
+      - name: driver_perfect_app_usage_rate
+        description: "Share of operated transfers with perfect app usage."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 1
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments: 
+            combination_of_columns:
+              - metric_date
+              - welcome_city_id
+              - hailing_type
+              - driver_type
+
+      - same_distinct_grain_count_as_upstream:
+          arguments:
+            compare_model: ref('int_transfers_enriched')
+            upstream_columns:
+              - operated_date
+              - welcome_city_id
+              - hailing_type
+              - driver_type

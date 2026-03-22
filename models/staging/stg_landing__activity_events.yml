@@ -1,0 +1,27 @@
+
+models:
+  - name: stg_landing__activity_events
+    description: "Staging model for transfer-related activity events."
+
+    columns:
+      - name: activity_event_id
+        description: "Primary key of the activity event."
+        tests:
+          - not_null
+          - unique
+
+      - name: transfer_id
+        description: "Foreign key to the related transfer."
+        tests:
+          - not_null
+
+      - name: event_name
+        description: "Raw event name emitted for the transfer lifecycle."
+        tests:
+          - not_null
+
+      - name: created_at
+        description: "Timestamp when the event record was created."
+
+      - name: updated_at
+        description: "Timestamp when the event record was last updated."

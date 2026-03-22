@@ -1,0 +1,15 @@
+models:
+  - name: stg_landing__welcome_cities
+    description: "Staging model for Welcome Pickups destination cities."
+
+    columns:
+      - name: welcome_city_id
+        description: "Primary key of the welcome city."
+        tests:
+          - not_null
+          - unique
+
+      - name: hailing_type
+        description: "Type of hailing algorithm used in the destination city."
+        tests:
+          - not_null

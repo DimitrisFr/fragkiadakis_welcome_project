@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: landing
+    database: dbt_project_catalog
+    schema: landing
+    tables:
+      - name: coupons
+      - name: drivers
+
+      - name: transfers
+
+
+      - name: exchange_rates
+      - name: activity_events
+      - name: welcome_cities
